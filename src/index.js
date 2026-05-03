@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { testConnection } = require('./config/database');
-const authMiddleware = require('./middleware/auth');
 
 // Import models to initialize associations
 require('./models');
@@ -23,9 +22,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/health', healthRoutes);
-app.use('/api/sync', authMiddleware, syncRoutes);
-app.use('/api/analytics', authMiddleware, analyticsRoutes);
-app.use('/api/products', authMiddleware, productRoutes);
+app.use('/api/sync', syncRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/products', productRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
