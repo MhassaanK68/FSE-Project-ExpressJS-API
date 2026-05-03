@@ -29,6 +29,9 @@ app.use('/api/products', productRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err);
+  if (err.parent) {
+    console.error('MySQL:', err.parent.code, err.parent.sqlMessage || err.parent.message);
+  }
   res.status(err.status || 500).json({
     success: false,
     error: err.message || 'Internal server error',

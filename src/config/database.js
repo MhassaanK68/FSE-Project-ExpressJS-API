@@ -13,7 +13,7 @@ const sequelize = new Sequelize(
   process.env.DB_PASSWORD,
   {
     host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT),
+    port: Number.parseInt(String(process.env.DB_PORT || '4000'), 10) || 3306,
     dialect: 'mysql',
     dialectOptions: {
       // SSL configuration for secure connections

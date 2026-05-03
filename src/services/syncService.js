@@ -214,7 +214,23 @@ class SyncService {
    * Pull products from server (for client download)
    */
   async pullProducts(since = null) {
-    const whereClause = since ? { updated_at: { [Sequelize.Op.gt]: since } } : {};
+    let effectiveSince = null;
+    if (since != null && String(since).trim() !== '') {
+      const raw = String(since).trim();
+      if (raw !== 'undefined' && raw !== 'null') {
+        const ms = Date.parse(raw);
+        if (Number.isNaN(ms)) {
+          const err = new Error('Invalid since parameter; use an ISO 8601 datetime string');
+          err.status = 400;
+          throw err;
+        }
+        effectiveSince = new Date(ms);
+      }
+    }
+
+    const whereClause = effectiveSince
+      ? { updated_at: { [Sequelize.Op.gt]: effectiveSince } }
+      : {};
 
     const products = await Product.findAll({
       where: whereClause,
