@@ -1,4 +1,7 @@
 const { Sequelize } = require('sequelize');
+// Static require so Vercel/serverless dependency tracing includes the driver;
+// Sequelize loads mysql2 dynamically and that import is often omitted from the bundle.
+require('mysql2');
 
 // SSL Configuration for cloud databases (TiDB Cloud, AWS RDS, etc.)
 const enableSSL = process.env.DB_SSL === 'true' || process.env.DB_SSL === '1';
